@@ -5,11 +5,17 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "set NODE_ENV=prod && nodemon server",
+    "dev": "set NODE_ENV=dev && nodemon server",
+    "test": "jest",
+    "test-watch": "jest --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "jest": {
+    "testEnvironment": "node"
+  },
   "devDependencies": {
     "concurrently": "^6.4.0",
     "jest": "^29.4.3",
