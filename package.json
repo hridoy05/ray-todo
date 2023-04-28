@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "set NODE_ENV=prod && nodemon server",
+    "start": "nodemon server",
     "dev": "set NODE_ENV=dev && nodemon server",
     "test": "jest",
     "test-watch": "jest --watch"
@@ -24,7 +24,9 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.7",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",

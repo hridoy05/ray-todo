@@ -14,14 +14,11 @@ const HttpRegister = async (req, res) => {
 
   const user = await createUser(name, email, password);
 
-  const token = user.createJWT();
-  console.log(user, token);
   res.status(StatusCodes.CREATED).json({
     user: {
       email: user.email,
       name: user.name,
     },
-    token,
   });
 };
 
@@ -34,7 +31,6 @@ const HttpLogin = async (req, res, next) => {
       return next(error);
     }
     const user = await findUserUsingEmail(email);
-    console.log(user);
     if (!user) {
       const error = new UnAuthenticatedError("Invalid Credentials");
       return next(error);
@@ -46,7 +42,10 @@ const HttpLogin = async (req, res, next) => {
     }
     const token = user.createJWT();
     user.password = undefined;
-    res.status(StatusCodes.OK).json({ user, token });
+    res
+      .status(StatusCodes.OK)
+      .cookie("token", { token }, { httpOnly: true })
+      .json({ user });
   } catch (err) {
     next(err);
   }
