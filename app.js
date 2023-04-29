@@ -1,5 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import authRouter from "./Routes/authRoutes.js";
 import taskRouter from "./Routes/TaskRoutes.js";
 const app = express();
@@ -15,6 +16,14 @@ import notFoundMiddleware from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 
 app.use(express.json());
+//app.use(cors({ credentials: true }));
+const corsConfig = {
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsConfig));
+app.options("*", cors(corsConfig));
 app.use(cookieParser());
 app.use(helmet());
 app.use(xss());

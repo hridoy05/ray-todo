@@ -53,9 +53,15 @@ export const getTasks = async (req, res, next) => {
       min = dayjs().subtract(30, "day").format("YYYY-MM-DD");
       max = dayjs().format("YYYY-MM-DD");
     }
-    if (type) {
+    if (type === "default") {
       var tasks = await Task.find({
-        userId: id,
+        userId,
+        ...(day && { date: { $lte: new Date(max), $gte: new Date(min) } }),
+      });
+    }
+    if (type && type !== "default") {
+      var tasks = await Task.find({
+        userId,
         type,
         ...(day && { date: { $lte: new Date(max), $gte: new Date(min) } }),
       });
@@ -72,11 +78,14 @@ export const getTasks = async (req, res, next) => {
 };
 
 export const deleteTask = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    await Task.findByIdAndDelete(id);
-    return res.status(204).json({ message: "successfully deleted" });
-  } catch (err) {
-    next(err);
+    const task = await Task.findByIdAndDelete({ _id: id });
+    if (!task) {
+      return res.status(404).json({ error: "task not found" });
+    }
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete contact" });
   }
 };

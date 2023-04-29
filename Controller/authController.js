@@ -13,12 +13,13 @@ const HttpRegister = async (req, res) => {
   }
 
   const user = await createUser(name, email, password);
-
+  const token = user.createJWT();
   res.status(StatusCodes.CREATED).json({
     user: {
       email: user.email,
       name: user.name,
     },
+    token,
   });
 };
 
@@ -42,10 +43,7 @@ const HttpLogin = async (req, res, next) => {
     }
     const token = user.createJWT();
     user.password = undefined;
-    res
-      .status(StatusCodes.OK)
-      .cookie("token", { token }, { httpOnly: true })
-      .json({ user });
+    res.status(StatusCodes.OK).json({ user, token });
   } catch (err) {
     next(err);
   }

@@ -46,7 +46,7 @@ const Login = () => {
   const handleLogin = (values, onSubmitProps) => {
     axios.post("/api/v1/auth/login", values).then((res) => {
       onSubmitProps.resetForm();
-      dispatch(setLogin(res.data.user));
+      dispatch(setLogin({ user: res.data.user, token: res.data.token }));
       navigate("/home");
     });
   };
