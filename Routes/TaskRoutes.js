@@ -7,13 +7,13 @@ import {
   updateTask,
   deleteTask,
 } from "../Controller/taskController.js";
-import { verifyJwtToken } from "../middleware/verifyToken.js";
+import auth from "../middleware/auth.js";
 const taskRouter = express.Router();
 
-taskRouter.post("/create", verifyJwtToken, createTask);
-taskRouter.put("/:id", verifyJwtToken, updateTask);
-taskRouter.get("/:id", verifyJwtToken, getTask);
-taskRouter.get("/", verifyJwtToken, getTasks);
-taskRouter.delete("/:id", verifyJwtToken, deleteTask);
+taskRouter.post("/create", auth, createTask);
+taskRouter.put("/:id", auth, updateTask);
+taskRouter.get("/:id", auth, getTask);
+taskRouter.get("/", auth, getTasks);
+taskRouter.delete("/:id", auth, deleteTask);
 
 export default taskRouter;
