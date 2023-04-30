@@ -6,6 +6,3 @@ if (process.env.NODE_ENV === "development") {
 } else {
   dotenv.config();
 }
-
-console.log(process.env.MONGO_URL);
-export let DB_URL = process.env.MONGO_URL;
