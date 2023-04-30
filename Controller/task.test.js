@@ -1,6 +1,6 @@
-const request = require("supertest");
-const app = require("../../app");
-const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
+import request from "supertest";
+import app from "../../app";
+import { mongoConnect, mongoDisconnect } from "../../services/mongo";
 jest.mock("../repository/task.repository.js");
 
 describe("Tasks API", () => {

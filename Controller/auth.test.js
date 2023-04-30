@@ -1,7 +1,7 @@
 import request from "supertest";
 import { StatusCodes } from "http-status-codes";
 import app from "../app.js";
-const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
+import { mongoConnect, mongoDisconnect } from "../../services/mongo";
 describe("HTTP endpoints", () => {
   beforeAll(async () => {
     await mongoDisconnect();
