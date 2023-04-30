@@ -1,7 +1,7 @@
 import request from "supertest";
 import { StatusCodes } from "http-status-codes";
 import app from "../app.js";
-import { mongoConnect, mongoDisconnect } from "../../services/mongo";
+import { mongoConnect, mongoDisconnect } from "../db/connect.js";
 describe("HTTP endpoints", () => {
   beforeAll(async () => {
     await mongoDisconnect();
@@ -11,7 +11,7 @@ describe("HTTP endpoints", () => {
     await mongoDisconnect();
   });
   it("should register a user", async () => {
-    const res = await request(app).post("/register").send({
+    const res = await request(app).post("/api/v1/auth/register").send({
       name: "John Doe",
       email: "johndoe@example.com",
       password: "password",
@@ -23,7 +23,7 @@ describe("HTTP endpoints", () => {
   });
 
   it("should login a user", async () => {
-    const res = await request(app).post("/login").send({
+    const res = await request(app).post("/api/v1/auth/login").send({
       email: "johndoe@example.com",
       password: "password",
     });
