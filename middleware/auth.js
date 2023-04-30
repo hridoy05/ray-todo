@@ -4,7 +4,7 @@ import { UnAuthenticatedError } from "../errors/index.js";
 const auth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer")) {
-    const error = new UnAuthenticatedError("Authentication Invalid");
+    const error = new UnAuthenticatedError("Not authorized to access");
     return next(error);
   }
   const token = authHeader.split(" ")[1];
@@ -14,7 +14,7 @@ const auth = async (req, res, next) => {
 
     next();
   } catch (err) {
-    const error = new UnAuthenticatedError("Authentication Invalid");
+    const error = new UnAuthenticatedError("Authentication access");
     return next(error);
   }
 };

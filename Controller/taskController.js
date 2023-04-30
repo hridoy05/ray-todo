@@ -1,88 +1,66 @@
 import Task from "../Models/Task.model.js";
 import dayjs from "dayjs";
-export const createTask = async (req, res, next) => {
+import {
+  createTask,
+  deleteTask,
+  getTaskById,
+  getTasks,
+  updateTask,
+} from "../repository/task.repository.js";
+
+export const httpCreateTask = async (req, res, next) => {
   try {
     const { userId } = req.user;
-
-    const completetionDate = new Date(req.body.date);
-    const task = new Task({ ...req.body, userId, date: completetionDate });
-    const saveTask = await task.save();
-    return res.status(201).json({ task: saveTask });
+    const taskData = { ...req.body, userId };
+    const savedTask = await createTask(taskData);
+    return res.status(201).json({ task: savedTask });
   } catch (err) {
     next(err);
   }
 };
 
-export const updateTask = async (req, res, next) => {
+export const httpUpdateTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const task = await Task.findByIdAndUpdate(
-      id,
-      { ...req.body },
-      { new: true }
-    );
+    const task = await updateTask(id, req.body);
     return res.status(201).json({ task });
   } catch (err) {
     next(err);
   }
 };
 
-export const getTask = async (req, res, next) => {
+export const httpGetTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const task = await Task.findById(id);
+    const task = await getTaskById(id);
+    if (!task) {
+      throw new BadRequestError("Task is not found");
+    }
+
     return res.status(201).json({ task });
   } catch (err) {
     next(err);
   }
 };
 
-export const getTasks = async (req, res, next) => {
+export const httpGetTasks = async (req, res, next) => {
   try {
     const type = req.query?.type;
     const day = req.query?.day;
     const { userId } = req.user;
-    var min, max;
-    if (day === "today") {
-      min = dayjs().format("YYYY-MM-DD");
-      max = dayjs().format("YYYY-MM-DD");
-    } else if (day === "seven") {
-      min = dayjs().subtract(7, "day").format("YYYY-MM-DD");
-      max = dayjs().format("YYYY-MM-DD");
-    } else if (day === "thirty") {
-      min = dayjs().subtract(30, "day").format("YYYY-MM-DD");
-      max = dayjs().format("YYYY-MM-DD");
-    }
-    if (type === "default") {
-      var tasks = await Task.find({
-        userId,
-        ...(day && { date: { $lte: new Date(max), $gte: new Date(min) } }),
-      });
-    }
-    if (type && type !== "default") {
-      var tasks = await Task.find({
-        userId,
-        type,
-        ...(day && { date: { $lte: new Date(max), $gte: new Date(min) } }),
-      });
-    } else {
-      var tasks = await Task.find({
-        userId,
-        ...(day && { date: { $lte: new Date(max), $gte: new Date(min) } }),
-      });
-    }
+    const tasks = await getTasks(userId, type, day);
     return res.status(201).json({ tasks });
   } catch (err) {
     next(err);
   }
 };
 
-export const deleteTask = async (req, res, next) => {
+export const httpDeleteTask = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const task = await Task.findByIdAndDelete({ _id: id });
+    const task = await deleteTask(id);
     if (!task) {
-      return res.status(404).json({ error: "task not found" });
+      throw new BadRequestError("Task is not found");
     }
     res.json(task);
   } catch (error) {

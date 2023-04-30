@@ -1,24 +1,20 @@
 import { StatusCodes } from "http-status-codes";
+import BadRequestError from "../errors/bad-request.js";
+import UnAuthenticatedError from "../errors/unauthenticated.js";
 
 const errorHandlerMiddleware = (err, req, res, next) => {
-  console.log(err, "err");
-  const defaultError = {
-    statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
-    msg: err.message || "Something went wrong, try again later",
-  };
-  if (err.name === "ValidationError") {
-    defaultError.statusCode = StatusCodes.BAD_REQUEST;
-    // defaultError.msg = err.message
-    defaultError.msg = Object.values(err.errors)
-      .map((item) => item.message)
-      .join(",");
+  //console.log(err, "err");
+  if (err instanceof BadRequestError) {
+    return res
+      .status(err.statusCode)
+      .json({ statuscode: err.statusCode, message: err.message });
+  } else if (err instanceof UnAuthenticatedError) {
+    return res
+      .status(err.statusCode)
+      .json({ statuscode: err.statusCode, message: err.message });
+  } else {
+    res.status(500).json({ message: "Internal server error" });
   }
-  if (err.code && err.code === 11000) {
-    defaultError.statusCode = StatusCodes.BAD_REQUEST;
-    defaultError.msg = `${Object.keys(err.keyValue)} field has to be unique`;
-  }
-
-  res.status(defaultError.statusCode).json({ msg: defaultError.msg });
 };
 
 export default errorHandlerMiddleware;

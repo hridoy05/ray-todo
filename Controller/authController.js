@@ -6,21 +6,28 @@ import {
 } from "../repository/auth.repository.js";
 
 //user sign in
-const HttpRegister = async (req, res) => {
-  const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    throw new BadRequestError("please provide all values");
+const HttpRegister = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      throw new BadRequestError("please provide all values");
+    }
+    const useremail = await findUserUsingEmail(email);
+    if (useremail) {
+      throw new BadRequestError("Email already in used");
+    }
+    const user = await createUser(name, email, password);
+    const token = user.createJWT();
+    res.status(StatusCodes.CREATED).json({
+      user: {
+        email: user.email,
+        name: user.name,
+      },
+      token,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  const user = await createUser(name, email, password);
-  const token = user.createJWT();
-  res.status(StatusCodes.CREATED).json({
-    user: {
-      email: user.email,
-      name: user.name,
-    },
-    token,
-  });
 };
 
 //user login
@@ -33,12 +40,12 @@ const HttpLogin = async (req, res, next) => {
     }
     const user = await findUserUsingEmail(email);
     if (!user) {
-      const error = new UnAuthenticatedError("Invalid Credentials");
+      const error = new UnAuthenticatedError("Invalid Email");
       return next(error);
     }
     const isPasswordCorrect = await user.comparePassword(password);
     if (!isPasswordCorrect) {
-      const error = new UnAuthenticatedError("Invalid Credentials");
+      const error = new UnAuthenticatedError("Invalid password");
       return next(error);
     }
     const token = user.createJWT();
