@@ -6,6 +6,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Typography,
 } from "@mui/material";
 import { Container } from "@mui/system";
 import { useState, useEffect } from "react";
@@ -13,15 +14,14 @@ import axios from "../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTask, setTasks } from "../redux/TaskSlice";
 import Header from "../components/Header";
-import { useNavigate } from "react-router-dom";
 import Task from "../components/Task";
 import Stack from "@mui/material/Stack";
+import { toast } from "react-toastify";
 const Home = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.user);
   const [typeFilter, setTypeFilter] = useState("");
   const [dayFilter, setDayFilter] = useState("");
-  const navigate = useNavigate();
   const types = ["default", "personal", "shopping", "wishlist", "work"];
   const days = [
     { label: "Today", value: "today" },
@@ -55,11 +55,13 @@ const Home = () => {
       })
       .then((res) => {
         dispatch(deleteTask(res.data));
+        toast.success("successfully deleted");
       });
   };
   return (
     <Box>
       <Header />
+
       <Container>
         <Box display="flex" justifyContent="space-between" mt="2rem">
           <FormControl style={{ minWidth: 150 }}>
@@ -100,11 +102,24 @@ const Home = () => {
         </Box>
         <Box mt="2rem">
           <Grid container spacing={2}>
-            {tasks?.map((task, idx) => (
-              <Grid item xs={12} md={3} key={`${idx}-${task.id}`}>
-                <Task task={task} handleDelete={handleDelete} />
-              </Grid>
-            ))}
+            {tasks && tasks.length > 0 ? (
+              tasks.map((task, idx) => (
+                <Grid item xs={12} md={3} key={`${idx}-${task.id}`}>
+                  <Task task={task} handleDelete={handleDelete} />
+                </Grid>
+              ))
+            ) : (
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  backgroundColor: "black",
+                  padding: "5px",
+                  color: "white",
+                }}
+              >
+                No tasks
+              </Typography>
+            )}
           </Grid>
         </Box>
       </Container>

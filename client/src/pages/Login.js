@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import axios from "../services/api";
 import { setLogin } from "../redux/UserSlice";
+import { toast } from "react-toastify";
 
 const initialRegisterValues = {
   name: "",
@@ -27,16 +28,21 @@ const initialLoginValues = {
 const registerSchema = Yup.object().shape({
   name: Yup.string().required("Required"),
   email: Yup.string().email("Not valid").required("Required"),
-  password: Yup.string().required("Required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters long")
+    .required("Required"),
 });
 
 const loginScehma = Yup.object().shape({
   email: Yup.string().email("Not valid").required("Required"),
-  password: Yup.string().required("Required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters long")
+    .required("Required"),
 });
 
 const Login = () => {
   const [page, setPage] = useState("login");
+  const [enable, setEnable] = useState(false);
   const isLogin = page === "login";
   const isRegister = page === "register";
   const dispatch = useDispatch();
@@ -44,22 +50,46 @@ const Login = () => {
   const isNotMobile = useMediaQuery("(min-width:768px)");
 
   const handleLogin = (values, onSubmitProps) => {
-    axios.post("/api/v1/auth/login", values).then((res) => {
-      onSubmitProps.resetForm();
-      dispatch(setLogin({ user: res.data.user, token: res.data.token }));
-      navigate("/home");
-    });
+    setEnable(true);
+    axios
+      .post("/api/v1/auth/login", values)
+      .then((res) => {
+        onSubmitProps.resetForm();
+        dispatch(setLogin({ user: res.data.user, token: res.data.token }));
+        navigate("/home");
+        toast.success("Login successful!");
+        setEnable(false);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 401) {
+          toast(err.response.data.message);
+        } else {
+          toast("Something went wrong!");
+        }
+        setEnable(false);
+      });
   };
 
   const handleRegister = (values, onSubmitProps) => {
-    // let formData = new FormData();
-    // for (const property of Object.keys(values)) {
-    //   formData.append(property, values[property]);
-    // }
-    axios.post("/api/v1/auth/register", values).then((res) => {
-      onSubmitProps.resetForm();
-      setPage("login");
-    });
+    setEnable(true);
+    try {
+      axios
+        .post("/api/v1/auth/register", values)
+        .then((res) => {
+          onSubmitProps.resetForm();
+          setPage("login");
+          toast.success("registration successful!");
+          setEnable(false);
+        })
+        .catch((err) => {
+          if (err.response && err.response.status === 400) {
+            toast.error(err.response.data.message);
+          }
+          setEnable(false);
+        });
+    } catch (err) {
+      toast.error("something erroe");
+    }
   };
 
   const handleForm = (values, onSubmitProps) => {
@@ -120,7 +150,18 @@ const Login = () => {
                 error={Boolean(touched.password) && Boolean(errors.password)}
                 helperText={touched.password && errors.password}
               />
-              <Button type="submit" m="2rem 0" background="#00d5fa">
+              <Button
+                type="submit"
+                m="2rem 0"
+                sx={{
+                  backgroundColor: "black",
+                  padding: "5px",
+                  width: "60%",
+                  margin: "0 auto",
+                  color: "white",
+                }}
+                disabled={enable}
+              >
                 {isLogin ? "Login" : "Register"}
               </Button>
               <Typography
@@ -137,9 +178,29 @@ const Login = () => {
                 }}
               >
                 {isLogin ? (
-                  <>Not a user, go to register</>
+                  <Box
+                    sx={{
+                      backgroundColor: "black",
+                      padding: "5px",
+                      width: "60%",
+                      margin: "0 auto",
+                      color: "white",
+                    }}
+                  >
+                    Not a user, go to register
+                  </Box>
                 ) : (
-                  <>Already a user, go to login</>
+                  <Box
+                    sx={{
+                      backgroundColor: "black",
+                      padding: "5px",
+                      width: "60%",
+                      margin: "0 auto",
+                      color: "white",
+                    }}
+                  >
+                    Already a user, go to login
+                  </Box>
                 )}
               </Typography>
             </Box>

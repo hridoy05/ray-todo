@@ -2,6 +2,7 @@ import { Box, Select, MenuItem, InputLabel, Button } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setLogout } from "../redux/UserSlice";
+import { toast } from "react-toastify";
 const Header = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const Header = () => {
           <MenuItem
             onClick={() => {
               dispatch(setLogout());
+              toast.success("logout sucessfully");
               navigate("/");
             }}
           >

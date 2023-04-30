@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import * as Yup from "yup";
+
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -19,20 +19,8 @@ import { useState } from "react";
 import axiosInstance from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-const initialEditSchema = Yup.object().shape({
-  name: Yup.string().required("Required"),
-  date: Yup.string().required("required"),
-  type: Yup.string().required("Required"),
-  time: Yup.string().required("Required"),
-  status: Yup.string().required("Required"),
-});
-
-const initialCreateSchema = Yup.object().shape({
-  name: Yup.string().required("Required"),
-  date: Yup.string().required("required"),
-  type: Yup.string().required("Required"),
-  time: Yup.string().required("Required"),
-});
+import { toast } from "react-toastify";
+import { initialCreateSchema, initialEditSchema } from "../schema/formschema";
 
 let initialValues = {
   name: "",
@@ -54,6 +42,7 @@ const TaskForm = ({ mode = "edit", task }) => {
         })
         .then((res) => {
           navigate("/home");
+          toast.success("successfully edited");
         });
     } else {
       values.time = values.time.format("HH:mm");
@@ -65,6 +54,7 @@ const TaskForm = ({ mode = "edit", task }) => {
         })
         .then((res) => {
           navigate("/home");
+          toast.success("successfully created");
         });
     }
   };
@@ -134,6 +124,7 @@ const TaskForm = ({ mode = "edit", task }) => {
                   }
                   onChange={(newValue) => {
                     values.time = newValue;
+                    console.log(newValue);
                     setTime(values.time);
                   }}
                   name="time"
