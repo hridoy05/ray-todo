@@ -41,6 +41,7 @@ npm start
 ## Environment Variables
 
 To run this project, you will need to add a file in your root folder and name it .env . Following environment variables in .env file. You can also set MONGO_URL with your local database. By default you get access the mongo atlas database using below steps.
+Important-note: this MONGO_URL link only for testing purpose.
 
 `MONGO_URL=mongodb+srv://mernUser:7DWiQR58R0uzBsuY@cluster0.uerym.mongodb.net/todo?retryWrites=true&w=majority`
 
