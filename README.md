@@ -49,6 +49,16 @@ Important-note: this MONGO_URL link only for testing purpose.
 
 `JWT_LIFETIME=30d`
 
+## Screenshots
+![ray-todo](https://user-images.githubusercontent.com/24815591/235359637-6ef24cc5-216d-4221-9679-21a8ffffc54b.jpg)
+
+![ray-todo-create](https://user-images.githubusercontent.com/24815591/235359650-108eeff8-4125-4e6d-89c8-3cef183cb837.jpg)
+
+![ray-todo-login](https://user-images.githubusercontent.com/24815591/235359659-fdf06881-b2c8-4428-b93a-694e901c4904.jpg)
+
+![ray-todo-edit](https://user-images.githubusercontent.com/24815591/235359673-b6191d59-e97b-44b1-ad5a-e8c4c1c6c18d.jpg)
+
+
 ## API Reference
 
 ### User Authentication
