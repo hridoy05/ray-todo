@@ -10,7 +10,7 @@ import {
 import { Link } from "react-router-dom";
 const Task = ({ task, handleDelete }) => {
   return (
-    <Box sx={{ minWidth: 275 }}>
+    <Box sx={{ minWidth: 275, backgroundColor: "black", color: "white" }}>
       <Card>
         <CardActionArea>
           <CardContent>

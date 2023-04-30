@@ -1,4 +1,11 @@
-import { Box, Select, MenuItem, InputLabel, Button } from "@mui/material";
+import {
+  Box,
+  Select,
+  MenuItem,
+  Button,
+  InputLabel,
+  Typography,
+} from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setLogout } from "../redux/UserSlice";
@@ -10,21 +17,21 @@ const Header = () => {
   return (
     <Box
       height="50px"
-      backgroundColor="#ED4E31"
+      backgroundColor="#242B54"
       padding="0 20px"
       display="flex"
       alignItems="center"
       justifyContent="space-between"
     >
-      <Box fontSize="20px" fontWeight="bold">
-        <Link to="/home" style={{ textDecoration: "none" }}>
-          <Button sx={{ color: "#FFE1DC" }}>Task up</Button>
+      <Box fontSize="20px">
+        <Link to="/home" style={{ textDecoration: "none", color: "#fff" }}>
+          Task up
         </Link>
         <Link
           to="/task/create"
           style={{ textDecoration: "none", marginLeft: "2px" }}
         >
-          <Button sx={{ color: "#FFE1DC" }} color="primary">
+          <Button sx={{ color: "#fff" }} color="primary">
             Task create
           </Button>
         </Link>
@@ -37,8 +44,8 @@ const Header = () => {
           }}
           value={user.name}
         >
-          <MenuItem sx={{ color: "#ED4E31" }} value={user.name}>
-            {user.name}
+          <MenuItem value={user.name}>
+            <Box color="#fff">{user.name}</Box>
           </MenuItem>
           <MenuItem
             onClick={() => {

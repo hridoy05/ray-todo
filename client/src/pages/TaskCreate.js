@@ -5,6 +5,7 @@ import Header from "../components/Header";
 const TaskCreate = () => {
   return (
     <Box>
+      <Header />
       <Container>
         <Taskform mode="create" />
       </Container>

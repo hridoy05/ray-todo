@@ -1,8 +1,15 @@
 import request from "supertest";
 import { StatusCodes } from "http-status-codes";
 import app from "../app.js";
-
+const { mongoConnect, mongoDisconnect } = require("../../services/mongo");
 describe("HTTP endpoints", () => {
+  beforeAll(async () => {
+    await mongoDisconnect();
+    await mongoConnect();
+  });
+  afterAll(async () => {
+    await mongoDisconnect();
+  });
   it("should register a user", async () => {
     const res = await request(app).post("/register").send({
       name: "John Doe",
