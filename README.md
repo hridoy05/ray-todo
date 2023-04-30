@@ -1,6 +1,6 @@
 ## Ray Todo Application
 
-The Ray-Todo project is an open-source web-based application for creating and managing to-do lists. The application allows users to create, edit, and delete tasks, filter todo based on days , types and track progress. In this document, we will provide an overview of the project, its features, and how to set up and use the application.
+The Ray-Todo project is an web-based application for creating and managing to-do lists. The application allows users to create, edit, and delete tasks, filter todo based on days , types and track progress. In this document, we will provide an overview of the project, its features, and how to set up and use the application.
 
 ## Installation
 
