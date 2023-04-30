@@ -132,3 +132,30 @@ On successful registration, returns the user object and a JWT token.
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NDRlNzE2MjVjMTc1ZTg4MjFlZDZiYzEiLCJpYXQiOjE2ODI4NjI1NzksImV4cCI6MTY4NTQ1NDU3OX0.
 
 ```
+
+### Todo API
+
+    This API allows you to perform CRUD (Create, Read, Update, Delete) operations on a todo list.
+
+##### Resources
+
+Todos
+A todo has the following properties:
+
+- id (string) - The unique identifier for the todo.
+- name (string) - The name of the todo.
+- type (enum) - The type of the todo.
+- status (enum) - The status of the todo.
+- userId (string) - The ID of the user who owns the todo.
+- createdAt (string) - The timestamp when the todo was created.
+- updatedAt (string) - The timestamp when the todo was last updated.
+
+#### Get all todos
+
+GET api/v1/todos?type=&day=
+
+Retrieves a list of all todos.
+
+Response
+
+Status code: 200
